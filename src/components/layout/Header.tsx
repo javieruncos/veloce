@@ -1,10 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { siteData } from "../../data/siteData";
 import Container from "../ui/Container";
 
+const SCROLL_THRESHOLD = 16;
+
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const wasOpenRef = useRef(false);
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > SCROLL_THRESHOLD);
+    };
+    const onScroll = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame !== 0) window.cancelAnimationFrame(frame);
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -12,11 +37,28 @@ export default function Header() {
       if (event.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.querySelector("a")?.focus();
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [open ]);
 
+  useEffect(() => {
+    if (wasOpenRef.current && !open) triggerRef.current?.focus();
+    wasOpenRef.current = open;
+  }, [open ]);
+
+  const solid = scrolled || open;
+
   return (
-    <header className="absolute inset-x-0 top-0 z-20 bg-transparent">
+    <header
+      className={`fixed inset-x-0 top-0 z-20 border-b transition-colors duration-200 ${
+        solid ? "border-line bg-ink" : "border-transparent bg-transparent"
+      }`}
+    >
       <Container>
         <div className="flex h-[68px] items-center justify-between">
           <a
@@ -47,6 +89,7 @@ export default function Header() {
           </a>
 
           <button
+            ref={triggerRef}
             type="button"
             className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-text md:hidden"
             aria-expanded={open}
@@ -59,33 +102,40 @@ export default function Header() {
         </div>
       </Container>
 
-      {open && (
-        <nav
-          id="mobile-nav"
-          aria-label="Mobile"
-          className="border-t border-line bg-ink md:hidden"
-        >
-          <Container className="flex flex-col gap-1 py-4">
-            {siteData.nav.map((item) => (
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            ref={panelRef}
+            id="mobile-nav"
+            aria-label="Mobile"
+            className="border-t border-line bg-ink md:hidden"
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <Container className="flex flex-col gap-1 py-4">
+              {siteData.nav.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="inline-flex min-h-[48px] items-center font-sans text-base font-medium text-text"
+                >
+                  {item.label}
+                </a>
+              ))}
               <a
-                key={item.href}
-                href={item.href}
+                href="#private-viewing"
                 onClick={() => setOpen(false)}
-                className="inline-flex min-h-[48px] items-center font-sans text-base font-medium text-text"
+                className="mt-2 inline-flex min-h-[48px] items-center justify-center border border-line font-mono text-xs tracking-[0.16em] text-text uppercase"
               >
-                {item.label}
+                Book a private viewing
               </a>
-            ))}
-            <a
-              href="#private-viewing"
-              onClick={() => setOpen(false)}
-              className="mt-2 inline-flex min-h-[48px] items-center justify-center border border-line font-mono text-xs tracking-[0.16em] text-text uppercase"
-            >
-              Book a private viewing
-            </a>
-          </Container>
-        </nav>
-      )}
+            </Container>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

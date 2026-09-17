@@ -1,3 +1,4 @@
+import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
 import DesignDetails from "./components/sections/DesignDetails";
 import FeaturedModel from "./components/sections/FeaturedModel";
@@ -20,6 +21,7 @@ function App() {
         <Personalization />
         <PrivateViewing />
       </main>
+      <Footer />
     </>
   );
 }
