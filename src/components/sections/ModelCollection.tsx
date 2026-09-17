@@ -1,30 +1,53 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import modelGtImg from "../../assets/images/model-gt.jpg";
+import modelS7Img from "../../assets/images/model-s7.jpg";
+import modelXImg from "../../assets/images/model-x.jpg";
 import { siteData } from "../../data/siteData";
 import Container from "../ui/Container";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const modelImages: Record<string, { src: string; alt: string }> = {
+  gt: {
+    src: modelGtImg,
+    alt: "VÉLOCÉ GT grand tourer coupé in a dark concrete showroom, three-quarter front view",
+  },
+  s7: {
+    src: modelS7Img,
+    alt: "VÉLOCÉ S7 performance sedan in a dark concrete showroom, three-quarter front view",
+  },
+  x: {
+    src: modelXImg,
+    alt: "VÉLOCÉ X performance SUV in a dark concrete showroom, three-quarter front view",
+  },
+};
+
 type Model = (typeof siteData.collection.models)[number];
 
 function ModelVisual({ model, aspect }: { model: Model; aspect: string }) {
+  const image = modelImages[model.id];
   return (
     <div
       className={`group relative overflow-hidden rounded-[6px] border border-line bg-raised ${aspect}`}
     >
-      <div className="absolute inset-0 bg-raised" aria-hidden="true" />
+      {image && (
+        <img
+          src={image.src}
+          alt={image.alt}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.02]"
+        />
+      )}
       <div
-        className="absolute inset-x-10 top-1/3 h-px bg-metal/25 transition-transform duration-600 ease-out group-hover:scale-x-105 md:inset-x-16"
+        className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-ink/10"
         aria-hidden="true"
       />
-      <div
-        className="absolute inset-x-16 top-2/3 h-px bg-metal/15 md:inset-x-24"
-        aria-hidden="true"
-      />
-      <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:bottom-6 md:left-6">
+      <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:bottom-6 md:left-6">
         {model.imageLabel}
       </p>
-      <p className="absolute top-5 right-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:top-6 md:right-6">
+      <p className="absolute top-5 right-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:top-6 md:right-6">
         {model.role}
       </p>
     </div>
