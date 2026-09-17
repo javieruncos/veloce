@@ -48,10 +48,10 @@ export default function Technology() {
           </p>
         </motion.div>
 
-        <div className="mt-12 grid gap-12 md:mt-14 md:grid-cols-12 md:gap-10">
+        <div className="mt-12 grid gap-12 md:mt-14 md:gap-10 lg:grid-cols-12">
           <motion.div
             {...reveal}
-            className="relative aspect-[16/10] overflow-hidden rounded-[6px] border border-line bg-raised md:col-span-5 md:aspect-[3/4]"
+            className="relative aspect-[16/10] overflow-hidden rounded-[6px] border border-line bg-raised lg:col-span-5 lg:aspect-[3/4]"
             role="img"
             aria-label="VÉLOCÉ GT cockpit with driver display and central screen at night"
           >
@@ -73,7 +73,7 @@ export default function Technology() {
 
           <motion.ul
             {...reveal}
-            className="md:col-span-7"
+            className="lg:col-span-7"
           >
             {technology.items.map((item: TechItem) => {
               const Icon = icons[item.icon as keyof typeof icons];

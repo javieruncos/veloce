@@ -47,10 +47,10 @@ export default function Personalization() {
       className="bg-surface py-24 text-text md:py-32"
     >
       <Container>
-        <div className="grid gap-12 md:grid-cols-12 md:gap-10">
+        <div className="grid gap-12 md:gap-10 lg:grid-cols-12">
           <motion.div
             {...reveal}
-            className="relative aspect-[4/3] overflow-hidden rounded-[6px] border border-line bg-raised md:col-span-7 md:aspect-[16/10]"
+            className="relative aspect-[4/3] overflow-hidden rounded-[6px] border border-line bg-raised lg:col-span-7 lg:aspect-[16/10]"
           >
             {selectedImage && (
               <motion.img
@@ -74,7 +74,7 @@ export default function Personalization() {
             </p>
           </motion.div>
 
-          <motion.div {...reveal} className="md:col-span-5">
+          <motion.div {...reveal} className="lg:col-span-5">
             <p className="font-mono text-xs font-medium tracking-[0.22em] text-metal uppercase">
               {personalization.eyebrow}
             </p>
@@ -91,7 +91,7 @@ export default function Personalization() {
             <div
               role="group"
               aria-label="Exterior finish"
-              className="mt-8 flex gap-3"
+              className="mt-8 flex flex-col gap-3 md:flex-row"
             >
               {personalization.finishes.map((finish) => {
                 const active = finish.id === selectedId;
@@ -103,7 +103,7 @@ export default function Personalization() {
                     aria-pressed={active}
                     aria-label={`${finish.name} — ${finish.code}`}
                     onClick={() => setSelectedId(finish.id)}
-                    className={`inline-flex min-h-[48px] items-center gap-3 rounded-[4px] border py-1.5 pr-4 pl-1.5 transition-colors duration-150 ${
+                    className={`inline-flex min-h-[48px] w-full items-center justify-start gap-3 rounded-[4px] border py-1.5 pr-4 pl-1.5 transition-colors duration-150 md:w-auto ${
                       active
                         ? "border-metal"
                         : "border-line hover:border-metal"
