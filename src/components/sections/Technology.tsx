@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Activity, Gauge, MonitorDot, ShieldCheck } from "lucide-react";
+import techCockpitImg from "../../assets/images/tech-cockpit.jpg";
 import { siteData } from "../../data/siteData";
 import Container from "../ui/Container";
 
@@ -52,18 +53,20 @@ export default function Technology() {
             {...reveal}
             className="relative aspect-[16/10] overflow-hidden rounded-[6px] border border-line bg-raised md:col-span-5 md:aspect-[3/4]"
             role="img"
-            aria-label="VÉLOCÉ cockpit at night with a dim driver display, placeholder for final photography"
+            aria-label="VÉLOCÉ GT cockpit with driver display and central screen at night"
           >
-            <div className="absolute inset-0 bg-raised" aria-hidden="true" />
-            <div
-              className="absolute inset-x-10 top-1/3 h-px bg-metal/25 md:inset-x-12"
-              aria-hidden="true"
+            <img
+              src={techCockpitImg}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-center"
             />
             <div
-              className="absolute inset-x-14 top-2/3 h-px bg-metal/15 md:inset-x-16"
+              className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-ink/10"
               aria-hidden="true"
             />
-            <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:bottom-6 md:left-6">
+            <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:bottom-6 md:left-6">
               {technology.imageLabel}
             </p>
           </motion.div>

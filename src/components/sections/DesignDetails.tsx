@@ -1,28 +1,51 @@
 import { motion, useReducedMotion } from "framer-motion";
+import detailFrontImg from "../../assets/images/detail-front.jpg";
+import detailInteriorImg from "../../assets/images/detail-interior.jpg";
+import detailWheelImg from "../../assets/images/detail-wheel.jpg";
 import { siteData } from "../../data/siteData";
 import Container from "../ui/Container";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const detailImages: Record<string, { src: string; alt: string }> = {
+  front: {
+    src: detailFrontImg,
+    alt: "VÉLOCÉ GT headlight and bonnet close-up in a dark studio",
+  },
+  interior: {
+    src: detailInteriorImg,
+    alt: "VÉLOCÉ GT cockpit with stitched leather seats and VÉLOCÉ sill plate",
+  },
+  wheel: {
+    src: detailWheelImg,
+    alt: "VÉLOCÉ GT wheel with drilled brake disc and V center cap",
+  },
+};
+
 type Detail = (typeof siteData.design.details)[number];
 
 function DetailVisual({ detail, aspect }: { detail: Detail; aspect: string }) {
+  const image = detailImages[detail.id];
   return (
     <div
       className={`group relative overflow-hidden rounded-[6px] border border-line bg-raised ${aspect}`}
       role="img"
-      aria-label={`${detail.title} Placeholder for final photography.`}
+      aria-label={detail.title}
     >
-      <div className="absolute inset-0 bg-raised" aria-hidden="true" />
+      {image && (
+        <img
+          src={image.src}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.02]"
+        />
+      )}
       <div
-        className="absolute inset-x-10 top-1/3 h-px bg-metal/25 transition-transform duration-600 ease-out group-hover:scale-x-105 md:inset-x-14"
+        className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-ink/10"
         aria-hidden="true"
       />
-      <div
-        className="absolute inset-x-14 top-2/3 h-px bg-metal/15 md:inset-x-20"
-        aria-hidden="true"
-      />
-      <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:bottom-6 md:left-6">
+      <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:bottom-6 md:left-6">
         {detail.imageLabel}
       </p>
     </div>
@@ -82,26 +105,32 @@ export default function DesignDetails() {
           </p>
         </motion.div>
 
-        <div className="mt-12 grid gap-12 md:mt-14 md:grid-cols-12 md:gap-8">
-          <motion.article
-            aria-labelledby="detail-front"
-            {...reveal}
-            className="md:col-span-7"
-          >
-            <DetailVisual detail={front} aspect="aspect-[4/3]" />
-            <DetailInfo detail={front} nameId="detail-front" />
-          </motion.article>
+        <motion.article
+          aria-labelledby="detail-front"
+          {...reveal}
+          className="mt-12 md:mt-14"
+        >
+          <DetailVisual detail={front} aspect="aspect-[16/10] md:aspect-[21/9]" />
+          <DetailInfo detail={front} nameId="detail-front" />
+        </motion.article>
 
-          <div className="grid gap-12 md:col-span-5 md:gap-10">
-            <motion.article aria-labelledby="detail-interior" {...reveal}>
-              <DetailVisual detail={interior} aspect="aspect-[16/10]" />
-              <DetailInfo detail={interior} nameId="detail-interior" />
-            </motion.article>
-            <motion.article aria-labelledby="detail-wheel" {...reveal}>
-              <DetailVisual detail={wheel} aspect="aspect-[16/10]" />
-              <DetailInfo detail={wheel} nameId="detail-wheel" />
-            </motion.article>
-          </div>
+        <div className="mt-12 grid gap-12 md:mt-14 md:grid-cols-2 md:gap-0">
+          <motion.article
+            aria-labelledby="detail-interior"
+            {...reveal}
+            className="md:border-r md:border-line md:pr-10"
+          >
+            <DetailVisual detail={interior} aspect="aspect-[16/10]" />
+            <DetailInfo detail={interior} nameId="detail-interior" />
+          </motion.article>
+          <motion.article
+            aria-labelledby="detail-wheel"
+            {...reveal}
+            className="md:pl-10"
+          >
+            <DetailVisual detail={wheel} aspect="aspect-[16/10]" />
+            <DetailInfo detail={wheel} nameId="detail-wheel" />
+          </motion.article>
         </div>
       </Container>
     </section>

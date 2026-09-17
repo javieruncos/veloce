@@ -135,11 +135,11 @@ export const siteData = {
     title: "Make It Yours.",
     intro: "One variable. Chosen with intent.",
     finishes: [
-      { id: "noir", name: "Graphite Black", code: "NOIR / STANDARD" },
-      { id: "argent", name: "Liquid Silver", code: "ARGENT / METALLIC" },
-      { id: "nuit", name: "Midnight Blue", code: "NUIT / DEEP" },
+      { id: "graphite", name: "Graphite Black", code: "GRAPHITE / STANDARD" },
+      { id: "silver", name: "Liquid Silver", code: "SILVER / METALLIC" },
+      { id: "midnight", name: "Midnight Blue", code: "MIDNIGHT / DEEP" },
     ],
-    continueLabel: "Continue with",
+    continueLabel: "Continue with this configuration",
   },
   privateViewing: {
     eyebrow: "PRIVATE VIEWING — 07",

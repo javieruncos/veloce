@@ -1,15 +1,27 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import veloceGtGraphiteImg from "../../assets/images/veloce-gt-graphite.jpg";
+import veloceGtMidnightImg from "../../assets/images/veloce-gt-midnight.jpg";
+import veloceGtSilverImg from "../../assets/images/veloce-gt-silver.jpg";
 import { siteData } from "../../data/siteData";
 import Container from "../ui/Container";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const swatches: Record<string, string> = {
-  noir: "bg-ink",
-  argent: "bg-metal",
-  nuit: "bg-surface",
+const finishImages: Record<string, { src: string; alt: string }> = {
+  graphite: {
+    src: veloceGtGraphiteImg,
+    alt: "VÉLOCÉ GT en acabado Graphite",
+  },
+  silver: {
+    src: veloceGtSilverImg,
+    alt: "VÉLOCÉ GT en acabado Silver",
+  },
+  midnight: {
+    src: veloceGtMidnightImg,
+    alt: "VÉLOCÉ GT en acabado Midnight",
+  },
 };
 
 export default function Personalization() {
@@ -19,6 +31,7 @@ export default function Personalization() {
   const selected =
     personalization.finishes.find((finish) => finish.id === selectedId) ??
     personalization.finishes[0];
+  const selectedImage = finishImages[selected.id];
 
   const reveal = {
     initial: reduceMotion ? false : { opacity: 0, y: 24 },
@@ -38,26 +51,25 @@ export default function Personalization() {
           <motion.div
             {...reveal}
             className="relative aspect-[4/3] overflow-hidden rounded-[6px] border border-line bg-raised md:col-span-7 md:aspect-[16/10]"
-            role="img"
-            aria-label={`VÉLOCÉ GT in ${selected.name}, placeholder for final photography`}
           >
-            <motion.div
-              key={selected.id}
-              className="absolute inset-0 bg-raised"
-              aria-hidden="true"
-              initial={reduceMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, ease: EASE }}
-            />
+            {selectedImage && (
+              <motion.img
+                key={selected.id}
+                src={selectedImage.src}
+                alt={selectedImage.alt}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                initial={reduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, ease: EASE }}
+              />
+            )}
             <div
-              className="absolute inset-x-10 top-1/3 h-px bg-metal/25 md:inset-x-14"
+              className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-ink/10"
               aria-hidden="true"
             />
-            <div
-              className="absolute inset-x-14 top-2/3 h-px bg-metal/15 md:inset-x-20"
-              aria-hidden="true"
-            />
-            <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:bottom-6 md:left-6">
+            <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:bottom-6 md:left-6">
               GT — {selected.code} / Studio 3/4
             </p>
           </motion.div>
@@ -77,30 +89,43 @@ export default function Personalization() {
             </p>
 
             <div
-              role="radiogroup"
+              role="group"
               aria-label="Exterior finish"
               className="mt-8 flex gap-3"
             >
               {personalization.finishes.map((finish) => {
                 const active = finish.id === selectedId;
+                const thumb = finishImages[finish.id];
                 return (
                   <button
                     key={finish.id}
                     type="button"
-                    role="radio"
-                    aria-checked={active}
+                    aria-pressed={active}
                     aria-label={`${finish.name} — ${finish.code}`}
                     onClick={() => setSelectedId(finish.id)}
-                    className={`inline-flex min-h-[48px] min-w-[48px] items-center justify-center rounded-[4px] border p-1.5 transition-colors duration-150 ${
+                    className={`inline-flex min-h-[48px] items-center gap-3 rounded-[4px] border py-1.5 pr-4 pl-1.5 transition-colors duration-150 ${
                       active
                         ? "border-metal"
                         : "border-line hover:border-metal"
                     }`}
                   >
+                    {thumb && (
+                      <img
+                        src={thumb.src}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        decoding="async"
+                        className="block h-8 w-12 rounded-[3px] border border-line object-cover object-center"
+                      />
+                    )}
                     <span
-                      aria-hidden="true"
-                      className={`block h-8 w-8 rounded-[3px] border border-line ${swatches[finish.id] ?? "bg-raised"}`}
-                    />
+                      className={`font-mono text-[11px] font-medium tracking-[0.14em] uppercase ${
+                        active ? "text-text" : "text-muted"
+                      }`}
+                    >
+                      {finish.name}
+                    </span>
                   </button>
                 );
               })}
@@ -114,7 +139,7 @@ export default function Personalization() {
               href="#private-viewing"
               className="mt-6 inline-flex min-h-[44px] items-center gap-2 font-mono text-xs font-medium tracking-[0.16em] text-text uppercase transition-colors duration-150 hover:text-bright"
             >
-              {personalization.continueLabel} {selected.name}
+              {personalization.continueLabel}
               <ArrowRight size={15} strokeWidth={1.5} aria-hidden="true" className="text-metal" />
             </a>
           </motion.div>

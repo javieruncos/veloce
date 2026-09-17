@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import featuredGtImg from "../../assets/images/featured-gt.jpg";
 import { siteData } from "../../data/siteData";
 import Button from "../ui/Button";
 import Container from "../ui/Container";
@@ -45,21 +46,23 @@ export default function FeaturedModel() {
           {...reveal}
           className="relative mt-12 aspect-[4/3] overflow-hidden rounded-[6px] border border-line bg-raised md:mt-14 md:aspect-[21/9]"
           role="img"
-          aria-label="VÉLOCÉ GT grand tourer side profile in a dark studio, placeholder for final photography"
+          aria-label="VÉLOCÉ GT grand tourer side profile in a dark studio"
         >
-          <div className="absolute inset-0 bg-raised" aria-hidden="true" />
-          <div
-            className="absolute inset-x-10 top-1/3 h-px bg-metal/25 md:inset-x-16"
-            aria-hidden="true"
+          <img
+            src={featuredGtImg}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover object-center"
           />
           <div
-            className="absolute inset-x-16 top-2/3 h-px bg-metal/15 md:inset-x-24"
+            className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-ink/10"
             aria-hidden="true"
           />
-          <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:bottom-6 md:left-6">
+          <p className="absolute bottom-5 left-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:bottom-6 md:left-6">
             {featured.imageLabel}
           </p>
-          <p className="absolute top-5 right-5 font-mono text-[11px] tracking-[0.22em] text-muted uppercase md:top-6 md:right-6">
+          <p className="absolute top-5 right-5 font-mono text-[11px] tracking-[0.22em] text-bright uppercase md:top-6 md:right-6">
             FLAGSHIP
           </p>
         </motion.div>
